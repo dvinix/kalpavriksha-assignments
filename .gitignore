@@ -1,0 +1,10 @@
+# Compiled binaries & objects
+calculator
+crud
+*.o
+*.out
+a.out
+
+# Runtime data files
+*.txt
+!README.md
