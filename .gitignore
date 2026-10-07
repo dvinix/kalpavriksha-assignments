@@ -1,0 +1,5 @@
+# Compiled binaries & objects
+calculator
+*.o
+*.out
+a.out

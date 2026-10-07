@@ -1,6 +1,8 @@
 #include <ctype.h>
 #include <stdio.h>
 
+#include <limits.h>
+
 #define MAX 1000
 
 char expr[MAX];
@@ -15,9 +17,18 @@ void skip_spaces() {
 }
 
 int get_number() {
-  int num = 0;
+  long long num = 0;
+  int sign = 1;
 
   skip_spaces();
+
+  if (expr[pos] == '+' || expr[pos] == '-') {
+    if (expr[pos] == '-') {
+      sign = -1;
+    }
+    pos++;
+    skip_spaces();
+  }
 
   if (!isdigit(expr[pos])) {
     error = 1;
@@ -26,10 +37,14 @@ int get_number() {
 
   while (isdigit(expr[pos])) {
     num = num * 10 + (expr[pos] - '0');
+    if ((sign == 1 && num > INT_MAX) || (sign == -1 && -num < INT_MIN)) {
+      error = 1;
+      return 0;
+    }
     pos++;
   }
 
-  return num;
+  return (int)(sign * num);
 }
 
 int get_term() {
