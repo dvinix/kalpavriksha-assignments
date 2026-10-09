@@ -1,0 +1,4 @@
+# Binaries and object files
+*.o
+*.out
+student_analyzer
