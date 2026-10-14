@@ -50,8 +50,8 @@ static bool parse_student(const char *line, Student *student);
 static int calculate_total(const int marks[], int num_subjects) {
   int total = 0;
 
-  for (int i = 0; i < num_subjects; i++) {
-    total += marks[i];
+  for (int subject_index = 0; subject_index < num_subjects; subject_index++) {
+    total += marks[subject_index];
   }
 
   return total;
@@ -99,7 +99,7 @@ static int stars_for_grade(char grade) {
 static void print_performance_pattern(char grade) {
   int star_count = stars_for_grade(grade);
 
-  for (int i = 0; i < star_count; i++) {
+  for (int star_index = 0; star_index < star_count; star_index++) {
     putchar('*');
   }
 
@@ -122,8 +122,8 @@ static void print_roll_numbers_recursive(const Student students[], int index,
 }
 
 static bool validate_marks(const int marks[], int num_subjects) {
-  for (int i = 0; i < num_subjects; i++) {
-    if (marks[i] < MIN_MARKS || marks[i] > MAX_MARKS) {
+  for (int subject_index = 0; subject_index < num_subjects; subject_index++) {
+    if (marks[subject_index] < MIN_MARKS || marks[subject_index] > MAX_MARKS) {
       return false;
     }
   }
@@ -132,8 +132,8 @@ static bool validate_marks(const int marks[], int num_subjects) {
 }
 
 static bool is_duplicate_roll(const Student students[], int count, int roll) {
-  for (int i = 0; i < count; i++) {
-    if (students[i].roll_number == roll) {
+  for (int student_index = 0; student_index < count; student_index++) {
+    if (students[student_index].roll_number == roll) {
       return true;
     }
   }
@@ -159,16 +159,16 @@ static void print_student(const Student *student) {
 }
 
 static void display_results(const Student students[], int total_students) {
-  for (int i = 0; i < total_students; i++) {
-    print_student(&students[i]);
+  for (int student_index = 0; student_index < total_students; student_index++) {
+    print_student(&students[student_index]);
 
-    if (students[i].average_marks < MIN_PASSING_AVG) {
+    if (students[student_index].average_marks < MIN_PASSING_AVG) {
       putchar('\n');
       continue;
     }
 
     printf("Performance: ");
-    print_performance_pattern(students[i].grade);
+    print_performance_pattern(students[student_index].grade);
     putchar('\n');
   }
 
@@ -237,41 +237,43 @@ int main(void) {
 
   Student students[MAX_STUDENTS];
 
-  for (int i = 0; i < num_students; i++) {
+  for (int student_index = 0; student_index < num_students; student_index++) {
     if (!read_line(line, sizeof line, true)) {
-      fprintf(stderr, "Error: Missing or oversized record %d.\n", i + 1);
+      fprintf(stderr, "Error: Missing or oversized record %d.\n",
+              student_index + 1);
       return EXIT_FAILURE;
     }
 
-    if (!parse_student(line, &students[i])) {
+    if (!parse_student(line, &students[student_index])) {
       fprintf(stderr,
               "Error: Invalid input format for student record %d "
               "(name must be under %d characters, marks must be "
               "integers).\n",
-              i + 1, MAX_NAME_LEN);
+              student_index + 1, MAX_NAME_LEN);
       return EXIT_FAILURE;
     }
 
-    if (students[i].roll_number <= 0) {
+    if (students[student_index].roll_number <= 0) {
       fprintf(stderr, "Error: Roll number in record %d must be positive.\n",
-              i + 1);
+              student_index + 1);
       return EXIT_FAILURE;
     }
 
-    if (is_duplicate_roll(students, i, students[i].roll_number)) {
+    if (is_duplicate_roll(students, student_index,
+                          students[student_index].roll_number)) {
       fprintf(stderr, "Error: Duplicate roll number %d.\n",
-              students[i].roll_number);
+              students[student_index].roll_number);
       return EXIT_FAILURE;
     }
 
-    if (!validate_marks(students[i].marks, NUM_SUBJECTS)) {
+    if (!validate_marks(students[student_index].marks, NUM_SUBJECTS)) {
       fprintf(stderr,
               "Error: Marks for student %d must be between %d and %d.\n",
-              students[i].roll_number, MIN_MARKS, MAX_MARKS);
+              students[student_index].roll_number, MIN_MARKS, MAX_MARKS);
       return EXIT_FAILURE;
     }
 
-    evaluate_student(&students[i]);
+    evaluate_student(&students[student_index]);
   }
 
   if (read_line(line, sizeof line, true)) {
