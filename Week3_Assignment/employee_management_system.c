@@ -2,15 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define NAME_LENGTH         50
-#define DESIGNATION_LENGTH  50
-#define INPUT_BUFFER_SIZE   128
-#define INDENT_WIDTH        4
+#define NAME_LENGTH 50
+#define DESIGNATION_LENGTH 50
+#define INPUT_BUFFER_SIZE 128
+#define INDENT_WIDTH 4
 
 typedef struct Employee {
-    int              employeeId;
-    char             name[NAME_LENGTH];
-    char             designation[DESIGNATION_LENGTH];
+    int employeeId;
+    char name[NAME_LENGTH];
+    char designation[DESIGNATION_LENGTH];
     struct Employee *reportingManager;
     struct Employee *firstReport;
     struct Employee *nextSibling;
@@ -35,9 +35,9 @@ static void readLine(const char *prompt, char *buffer, size_t bufferSize)
 
 static int readInteger(const char *prompt, int *value)
 {
-    char  inputBuffer[INPUT_BUFFER_SIZE];
+    char inputBuffer[INPUT_BUFFER_SIZE];
     char *parseEnd;
-    long  parsedValue;
+    long parsedValue;
 
     readLine(prompt, inputBuffer, sizeof(inputBuffer));
     if (inputBuffer[0] == '\0') {
@@ -166,10 +166,10 @@ static void freeReports(Employee *chain)
 
 static void addEmployee(void)
 {
-    int       employeeId;
-    int       managerId;
-    char      name[NAME_LENGTH];
-    char      designation[DESIGNATION_LENGTH];
+    int employeeId;
+    int managerId;
+    char name[NAME_LENGTH];
+    char designation[DESIGNATION_LENGTH];
     Employee *manager = NULL;
     Employee *newEmployee;
 
@@ -223,7 +223,7 @@ static void addEmployee(void)
 
 static void removeEmployee(void)
 {
-    int       employeeId;
+    int employeeId;
     Employee *target;
     Employee *manager;
     Employee *promotedEmployee;
@@ -269,7 +269,7 @@ static void removeEmployee(void)
 
 static void displayEmployeeHierarchy(void)
 {
-    int       employeeId;
+    int employeeId;
     Employee *selectedEmployee;
 
     if (!readInteger("Enter Employee ID: ", &employeeId)) {
@@ -321,12 +321,24 @@ int main(void)
         }
 
         switch (menuChoice) {
-            case 1:  addEmployee();               break;
-            case 2:  removeEmployee();            break;
-            case 3:  displayEmployeeHierarchy();  break;
-            case 4:  displayCompleteHierarchy();  break;
-            case 5:  isRunning = 0;               break;
-            default: printf("Invalid choice. Please enter a number from 1 to 5.\n");
+            case 1:
+                addEmployee();
+                break;
+            case 2:
+                removeEmployee();
+                break;
+            case 3:
+                displayEmployeeHierarchy();
+                break;
+            case 4:
+                displayCompleteHierarchy();
+                break;
+            case 5:
+                isRunning = 0;
+                break;
+            default:
+                printf("Invalid choice. Please enter a number from 1 to 5.\n");
+                break;
         }
     }
 
